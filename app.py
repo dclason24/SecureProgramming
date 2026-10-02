@@ -1,9 +1,13 @@
+import os
 import sqlite3
 from flask import Flask, g, render_template, session, redirect, url_for, request
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 DATABASE = 'SecureProgramming.db'
-app.secret_key = 'secret'
+app.secret_key = os.environ.get("SECRET_KEY")
 app.debug = True
 
 def get_db():
