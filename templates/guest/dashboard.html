@@ -1,1 +1,28 @@
-{% block header %}<h2>Welcome, {{name}}</h2>{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='art.css') }}">
+</head>
+
+<body>
+    <div id="topnav">
+    <div id="welcome">
+        {% block header %}
+            <h2>Welcome, {{name}}</h2>
+        {% endblock %}
+    </div>
+
+    <div id="logout">
+       <h2> <a href="{{ url_for('logout') }}">Log Out</a></h2>
+    </div>
+</div>
+    
+    <div id = "MainArtPic">
+     <img src="{{ url_for('static', filename='pictures/ArtGalleryHome.jpg') }}" 
+     alt="Art Gallery Home">   
+    </div>
+    
+
+</body>
+</html>
