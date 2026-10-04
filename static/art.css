@@ -47,3 +47,66 @@ body {
 #logout a:hover {
     text-decoration: underline;
 }
+
+#artPic {
+    width: 95%;
+    max-width: 1200px;
+    margin: 30px auto;
+
+    background-color: #e5e7eb;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+
+    padding: 30px;
+    border-radius: 12px;
+}
+
+#artPic img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+#navLinks {
+    display: flex;
+    gap: 20px;
+}
+
+#navLinks a {
+    color: #334155;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#navLinks a:hover {
+    text-decoration: underline;
+}
+
+#roomInfo, #galleryCapacity {
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+#roomInfo h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 20px;
+}
+
+#roomInfo p {
+    font-size: 20px;
+    color: #475569;
+    margin: 10px 0;
+}
+
+#roomInfo p em {
+    font-weight: 700;
+    color: #334155;
+}

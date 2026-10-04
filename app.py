@@ -94,12 +94,18 @@ def login():
 def admin():
     if 'ID' not in session:
         return redirect(url_for('login'))
+
+    db=get_db()
+    cursor = db.cursor()
+    cursor.execute("select sum(current_capacity) from rooms")
+    total_capacity = cursor.fetchone()[0]
+    
     
     if session.get('role') != 'admin':
         return "Access denied. You do not have permission to access this page."
     
     else:
-        return render_template("admin/dashboard.html", name= 'Admin')
+        return render_template("admin/dashboard.html", name= 'Admin', gallery_capacity = total_capacity)
 
 @app.route('/employee')
 def employee():
@@ -115,10 +121,15 @@ def employee():
     cursor = db.cursor()
     cursor.execute("select name from user where ID = ?", (user_id,))
     result = cursor.fetchone()
+
+    cursor.execute("select sum(current_capacity) from rooms")
+    total_capacity = cursor.fetchone()[0]
+
+    
     cursor.close()
 
     name = result[0]
-    return render_template("employee/dashboard.html", name = name)
+    return render_template("employee/dashboard.html", name = name, gallery_capacity = total_capacity)
   
 
 @app.route('/guest')
@@ -135,10 +146,97 @@ def guest():
     cursor = db.cursor()
     cursor.execute("select name from user where ID = ?", (user_id,))
     result = cursor.fetchone()
+
+    cursor.execute("select sum(current_capacity) from rooms")
+    total_capacity = cursor.fetchone()[0]
+
+
     cursor.close()
 
     name = result[0]
-    return render_template("guest/dashboard.html", name = name)
+    return render_template("guest/dashboard.html", name = name, gallery_capacity = total_capacity)
+
+@app.route('/room1')
+def room1():
+    if 'ID' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['ID']
+    room_id = 1
+
+    db=get_db()
+    cursor = db.cursor()
+
+    cursor.execute("select name from user where ID = ?", (user_id,))
+    Nameresult = cursor.fetchone()
+    name = Nameresult[0]
+
+    cursor.execute("select room_name, max_capacity, current_capacity, description from rooms where room_id = ?", (room_id,))
+    room_result = cursor.fetchone()
+    room_name = room_result[0]
+    room_Maxcapacity = room_result[1]
+    room_current_capacity = room_result[2]
+    room_description = room_result[3]
+
+    cursor.close()
+    return render_template("room1.html", name = name, room_name = room_name, 
+                           room_Maxcapacity = room_Maxcapacity, room_current_capacity = room_current_capacity, 
+                            room_description = room_description, role = session['role'])
+
+
+@app.route('/room2')
+def room2():
+    if 'ID' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['ID']
+    room_id = 2
+
+    db=get_db()
+    cursor = db.cursor()
+
+    cursor.execute("select name from user where ID = ?", (user_id,))
+    Nameresult = cursor.fetchone()
+    name = Nameresult[0]
+
+    cursor.execute("select room_name, max_capacity, current_capacity, description from rooms where room_id = ?", (room_id,))
+    room_result = cursor.fetchone()
+    room_name = room_result[0]
+    room_Maxcapacity = room_result[1]
+    room_current_capacity = room_result[2]
+    room_description = room_result[3]
+
+    cursor.close()
+    return render_template("room2.html", name = name, room_name = room_name, 
+                           room_Maxcapacity = room_Maxcapacity, room_current_capacity = room_current_capacity, 
+                            room_description = room_description, role = session['role'])
+
+@app.route('/room3')
+def room3():
+    if 'ID' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['ID']
+    room_id = 3
+
+    db=get_db()
+    cursor = db.cursor()
+
+    cursor.execute("select name from user where ID = ?", (user_id,))
+    Nameresult = cursor.fetchone()
+    name = Nameresult[0]
+
+    cursor.execute("select room_name, max_capacity, current_capacity, description from rooms where room_id = ?", (room_id,))
+    room_result = cursor.fetchone()
+    room_name = room_result[0]
+    room_Maxcapacity = room_result[1]
+    room_current_capacity = room_result[2]
+    room_description = room_result[3]
+
+    cursor.close()
+    return render_template("room3.html", name = name, room_name = room_name, 
+                           room_Maxcapacity = room_Maxcapacity, room_current_capacity = room_current_capacity, 
+                            room_description = room_description, role = session['role'])
 
 @app.route('/logout')
 def logout():
