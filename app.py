@@ -2,6 +2,7 @@ import os
 import sqlite3
 from flask import Flask, g, render_template, session, redirect, url_for, request
 from dotenv import load_dotenv
+from werkzeug.security import check_password_hash
 
 load_dotenv()
 
@@ -32,12 +33,12 @@ def close_connection(exception):
 @app.route('/')
 def base():
     # Check if user is logged in
-    if 'user_id' in session:
+    if 'ID' in session:
         role = session.get('role')
         if role == 'guest':
             return redirect(url_for('guest'))
         elif role == 'employee':
-            return redirect(url_for('associate'))
+            return redirect(url_for('employee'))
         elif role == 'admin':
             return redirect(url_for('admin'))
         else: 
@@ -68,7 +69,7 @@ def login():
     user = cursor.fetchone()
     cursor.close()
 
-    if user and user[2] == password:
+    if user and check_password_hash(user[2], password):
 
         session['ID'] = user[0]
         session['username'] = user[1]
