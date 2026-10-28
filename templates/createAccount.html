@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card">
+
+            <div class="login-header">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+                <h2>Create Account</h2>
+                <p>Enter your information to create an account</p>
+            </div>
+
+            <form class="login-form" id="createAccount"
+                  method="POST"
+                  action="{{ url_for('createAccount') }}">
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="username" name="username" required autocomplete="username">
+                        <label for="username">Username</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type = "text" id="name" name="name" required autocomplete="name">
+                        <label for="name">Name</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper password-wrapper">
+                        <input type="password" id="password" name="password" required minlength="8" autocomplete="new-password">
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper password-wrapper">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" autocomplete="new-password">
+                            <label for="confirmPassword">Confirm Password</label>
+                    </div>
+
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <span class="btn-text">Create Account</span>
+                    <span class="btn-loader"></span>
+                </button>
+
+            </form>
+
+            <div class="signup-link">
+                <p>
+                    Already have an account?
+                    <a href="{{ url_for('login') }}">Sign In</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('createAccount');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwordError = document.getElementById('passwordError');
+
+        form.addEventListener('submit', function(event) {
+            if (password.value !== confirmPassword.value) {
+                event.preventDefault();
+
+                passwordError.textContent = "Passwords do not match.";
+                confirmPassword.focus();
+            } else {
+                passwordError.textContent = "";
+            }
+        });
+
+        confirmPassword.addEventListener('input', function() {
+            passwordError.textContent = "";
+        });
+    </script>
+</body>
+</html>

@@ -1,8 +1,9 @@
 import os
 import sqlite3
-from flask import Flask, g, render_template, session, redirect, url_for, request
+from flask import Flask, g, render_template, session, redirect, url_for, request, flash
 from dotenv import load_dotenv
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
+
 
 load_dotenv()
 
@@ -42,10 +43,10 @@ def base():
         elif role == 'admin':
             return redirect(url_for('admin'))
         else: 
-            return "Role not recognized"
+            return redirect(url_for('unsignedIn'))
 
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('unsignedIn'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -96,17 +97,16 @@ def admin():
     if 'ID' not in session:
         return redirect(url_for('login'))
 
+    if session.get('role') != 'admin':
+        return "Access denied. You do not have permission to access this page."
+
     db=get_db()
     cursor = db.cursor()
     cursor.execute("select sum(current_capacity) from rooms")
     total_capacity = cursor.fetchone()[0]
     
     
-    if session.get('role') != 'admin':
-        return "Access denied. You do not have permission to access this page."
-    
-    else:
-        return render_template("admin/dashboard.html", name= 'Admin', gallery_capacity = total_capacity)
+    return render_template("admin/dashboard.html", name= 'Admin', gallery_capacity = total_capacity)
 
 @app.route('/employee')
 def employee():
@@ -156,6 +156,73 @@ def guest():
 
     name = result[0]
     return render_template("guest/dashboard.html", name = name, gallery_capacity = total_capacity)
+
+@app.route('/unsignedIn')
+def unsignedIn():
+
+    db=get_db()
+    cursor = db.cursor()
+    cursor.execute("select sum(current_capacity) from rooms")
+    total_capacity = cursor.fetchone()[0]
+    cursor.close()
+    
+    return render_template("unsignedIn/dashboard.html", gallery_capacity = total_capacity)
+
+
+@app.route('/createAccount', methods=['GET', 'POST'])
+def createAccount():  
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        name = request.form.get('name', '').strip()
+        password = request.form.get('password', '')
+        confirmPassword = request.form.get('confirmPassword', '')
+
+        if not username or not name or not password:
+            flash('Please fill in all fields.')
+            return redirect(url_for('createAccount'))
+
+        if password != confirmPassword:
+            flash('Passwords do not match.')
+            return redirect(url_for('createAccount'))
+
+        if len(password) < 8:
+            flash('Password must be at least 8 characters.')
+            return redirect(url_for('createAccount'))
+
+        db = get_db()
+        cursor = db.cursor()
+        print("8. Database connection successful!")
+
+        try:
+            cursor.execute(
+            "SELECT ID FROM user WHERE username = ?",
+            (username,)
+            )
+
+            if cursor.fetchone():
+                flash('An account with this username already exists.')
+                return redirect(url_for('createAccount'))
+
+            hashed_password = generate_password_hash(password)
+
+            cursor.execute(
+            """
+            INSERT INTO user (username, password, name, role)
+            VALUES (?, ?, ?, ?)
+            """,
+            (username, hashed_password, name, "guest")
+            )
+
+            db.commit()
+
+            flash('Account created successfully! You can now sign in.')
+            return redirect(url_for('login'))
+
+        finally:
+            cursor.close()
+
+    return render_template('createAccount.html')
+
 
 @app.route('/room1')
 def room1():

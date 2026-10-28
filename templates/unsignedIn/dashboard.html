@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='art.css') }}">
+</head>
+
+<body>
+    <div id="topnav">
+    <div id="welcome">
+            <h2>Welcome, Guest</h2>
+    </div>
+
+    <div id="login">
+       <h2> <a href="{{ url_for('login') }}">Log In</a></h2>
+    </div>
+</div>
+
+<div id="galleryCapacity">
+    <h2>Gallery Capacity : {{ gallery_capacity }}</h2>
+</div>
+    
+    <div id = "MainArtPic">
+     <img src="{{ url_for('static', filename='pictures/ArtGalleryHome.jpg') }}" 
+     alt="Art Gallery Home" usemap = "#gallerymap">
+ </div>
+        <map name="gallerymap">
+            <area shape="rect" coords="50,400,300,650" href="{{ url_for('room1') }}" alt="View Art">
+            <area shape="rect" coords="550,450,750,650" href="{{ url_for('room2') }}" alt="Add Art">
+            <area shape="rect" coords="1000,400,1300,650" href="{{ url_for('room3') }}" alt="Edit Art">   
+
+   
+    
+
+</body>
+</html>
