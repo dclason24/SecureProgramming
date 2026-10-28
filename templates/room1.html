@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='art.css') }}">
+</head>
+
+<body>
+    <div id="topnav">
+    <div id="welcome">
+        {% block header %}
+            <h2>Welcome, {{name}}</h2>
+        {% endblock %}
+    </div>
+
+    <div id="navLinks">
+        {% if role == 'guest' %}
+            <a href="{{ url_for('guest') }}"> Back to Dashboard </a>
+        {% elif role == 'employee' %}
+            <a href="{{ url_for('employee') }}"> Back to Dashboard </a>
+        {% elif role == 'admin' %}
+            <a href="{{ url_for('admin') }}"> Back to Dashboard </a>
+        {% endif %}
+
+        <a href="{{ url_for('logout') }}">Log Out</a>
+    </div>
+
+    </div>
+
+   <div id="roomInfo">
+        <h1>{{ room_name }}</h1>
+
+        <p><em>Current Capacity:</em> {{ room_current_capacity }}</p>
+
+        <p><em>Maximum Capacity:</em> {{ room_Maxcapacity }}</p>
+
+        <p><em>Description:</em> {{ room_description }}</p>
+    </div>
+
+    <div id = "artPic">
+        <img src="{{ url_for('static', filename='pictures/beePicture.jpeg') }}" >
+         <img src="{{ url_for('static', filename='pictures/dogPicture.jpeg') }}" >
+    </div>
+
+</body>
