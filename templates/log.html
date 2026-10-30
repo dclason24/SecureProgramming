@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='art.css') }}">
+</head>
+
+<body>
+    <div id="topnav">
+    <div id="welcome">
+        {% block header %}
+            <h2>Welcome, {{name}}</h2>
+        {% endblock %}
+    </div>
+
+    <div id="logout">
+        <h2><a href="{{ url_for('admin') }}"> Back to Dashboard </a> </h2>
+       <h2> <a href="{{ url_for('logout') }}">Log Out</a></h2>
+       <h2> <a href="{{ url_for('log') }}">Logs</a></h2>
+    </div>
+</div>
+    <div id = "logsContainer"> 
+        <h2> Activity Log </h2>
+        <table id="logsTable"> 
+            <tr>
+                <th>Log ID</th>
+                <th>User ID</th>
+                <th>Action</th>
+                <th>Outcome</th>
+                <th>Timestamp</th>
+                <th>Person ID</th>
+                <th>IP Address</th>
+            </tr>
+            {% for log in logs %}
+    <tr>
+        <td>{{ log[0] }}</td>
+        <td>{{ log[1] }}</td>
+        <td>{{ log[2] }}</td>
+        <td>{{ log[3] }}</td>
+         <td>{{ log[4] }}</td>
+         <td>{{ log[5] }}</td>
+        <td>{{ log[6] }}</td>
+    </tr>
+    {% endfor %}
+        </table>
+
+    </div>
+</body>
+ <script>
+    window.addEventListener('pagehide', function() {
+
+        navigator.sendBeacon(
+            "{{ url_for('logPageExit4') }}",
+        );
+
+    });
+</script>
+</html>
+
