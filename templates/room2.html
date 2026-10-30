@@ -41,5 +41,14 @@
         <img src="{{ url_for('static', filename='pictures/pottery1Image.jpeg') }}" >
          <img src="{{ url_for('static', filename='pictures/pottery2Image.jpeg') }}" >
     </div>
+        <script>
+    window.addEventListener('pagehide', function() {
+
+        navigator.sendBeacon(
+            "{{ url_for('logPageExit2') }}",
+        );
+
+    });
+</script>
 
 </body>
