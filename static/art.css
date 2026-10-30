@@ -26,15 +26,20 @@ body {
     align-items: center;
 }
 
+#logout {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 #MainArtPic {
-    width: 90%;              /* makes the picture bigger */
+    width: 90%;             
     max-width: 1200px;
-    margin: 60px auto 0 auto; /* moves it down and centers it */
+    margin: 60px auto 0 auto; 
 }
 
 #MainArtPic img {
-    width: 100%;             /* fills the container */
-    height: auto;
+    width: 100%;          
     display: block;
     border-radius: 12px;
 }
@@ -109,4 +114,48 @@ body {
 #roomInfo p em {
     font-weight: 700;
     color: #334155;
+}
+
+#logsContainer {
+    width: 95%;
+    max-width: 1200px;
+    margin: 40px auto;
+
+    background-color: #e5e7eb;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+#logsContainer h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 25px;
+}
+
+#logsTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f8fafc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#logsTable th {
+    background-color: #cbd5e1;
+    color: #334155;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 15px;
+    text-align: left;
+}
+
+#logsTable td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #cbd5e1;
+    color: #475569;
+}
+
+#logsTable tr:hover {
+    background-color: #e2e8f0;
 }

@@ -149,6 +149,12 @@ def logPageExit3():
 
     return '', 204
 
+@app.route('/logPageExit4', methods=['POST'])
+def logPageExit4():
+    log_activity('leaveLogPage')
+
+    return '', 204
+
 
 @app.route('/')
 def base():
@@ -239,7 +245,7 @@ def admin():
 
     log_activity('loadAdminPage')
     
-    return render_template("admin/dashboard.html", name= 'Admin', gallery_capacity = total_capacity)
+    return render_template("admin/dashboard.html", name= 'Admin', gallery_capacity = 1)
 
 @app.route('/employee')
 def employee():
@@ -267,7 +273,7 @@ def employee():
     cursor.close()
 
     name = result[0]
-    return render_template("employee/dashboard.html", name = name, gallery_capacity = total_capacity)
+    return render_template("employee/dashboard.html", name = name, gallery_capacity = 1)
   
 
 @app.route('/guest')
@@ -296,7 +302,7 @@ def guest():
     cursor.close()
 
     name = result[0]
-    return render_template("guest/dashboard.html", name = name, gallery_capacity = total_capacity)
+    return render_template("guest/dashboard.html", name = name, gallery_capacity = 1)
 
 @app.route('/unsignedIn')
 def unsignedIn():
@@ -309,7 +315,7 @@ def unsignedIn():
     total_capacity = cursor.fetchone()[0]
     cursor.close()
     
-    return render_template("unsignedIn/dashboard.html", gallery_capacity = total_capacity)
+    return render_template("unsignedIn/dashboard.html", gallery_capacity = 1)
 
 
 @app.route('/createAccount', methods=['GET', 'POST'])
@@ -455,6 +461,28 @@ def room3():
     return render_template("room3.html", name = name, room_name = room_name, 
                            room_Maxcapacity = room_Maxcapacity, room_current_capacity = room_current_capacity, 
                             room_description = room_description, role = session['role'])
+
+@app.route('/log')
+def log():
+    log_activity('EnterLog', outcome='success')
+
+    user_id = session['ID']
+    
+    db=get_db()
+    cursor = db.cursor()
+    
+    cursor.execute("select name from user where ID = ?", (user_id,))
+    Nameresult = cursor.fetchone()
+    name = Nameresult[0]
+
+    cursor.execute("""select * from audit_logs""")
+    logs = cursor.fetchall()
+
+    cursor.close()
+
+    return render_template('log.html', logs=logs)
+
+
 
 @app.route('/logout')
 def logout():
