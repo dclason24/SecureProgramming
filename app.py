@@ -10,7 +10,7 @@ load_dotenv()
 app = Flask(__name__)
 DATABASE = "SecureProgramming.db"
 app.secret_key = os.environ.get("SECRET_KEY")
-app.debug = True
+app.debug = False
 
 
 @app.after_request
@@ -583,4 +583,4 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
