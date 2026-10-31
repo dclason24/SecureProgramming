@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='art.css') }}">
+
+    <style>
+        .user-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 25px;
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background: #cbd5e1;
+        }
+
+        select, button {
+            padding: 8px;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="topnav">
+        <h2>Manage Users</h2>
+        <h2>
+            <a href="{{ url_for('admin') }}">
+                Back to Dashboard
+            </a>
+        </h2>
+    </div>
+
+    <div class="user-container">
+        <h2>User Role Management</h2>
+        <p>Administrators can update user permissions here.</p>
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Current Role</th>
+                <th>Change Role</th>
+            </tr>
+
+            {% for user in users %}
+            <tr>
+                <td>{{ user[1] }}</td>
+                <td>{{ user[2] }}</td>
+                <td>{{ user[3] }}</td>
+
+                <td>
+                    {% if user[0]|int == current_user_id|int %}
+                        Your account
+                    {% else %}
+                        <form method="POST"
+                              action="{{ url_for('manage_users') }}">
+
+                            <input type="hidden"
+                                   name="csrf_token"
+                                   value="{{ csrf_token }}">
+
+                            <input type="hidden"
+                                   name="user_id"
+                                   value="{{ user[0] }}">
+
+                            <select name="role">
+                                <option value="guest"
+                                    {% if user[3] == 'guest' %}selected{% endif %}>
+                                    Guest
+                                </option>
+
+                                <option value="employee"
+                                    {% if user[3] == 'employee' %}selected{% endif %}>
+                                    Employee
+                                </option>
+
+                                <option value="admin"
+                                    {% if user[3] == 'admin' %}selected{% endif %}>
+                                    Admin
+                                </option>
+                            </select>
+
+                            <button type="submit">Save</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</body>
+</html>
